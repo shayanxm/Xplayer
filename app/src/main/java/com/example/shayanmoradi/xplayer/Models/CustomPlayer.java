@@ -37,9 +37,9 @@ public class CustomPlayer {
         return instance;
     }
 
-    public void play( String songUri ) {
-
-        //String songUri = playingList.get(currentSongPointer).getmSongPath();
+    public void play( Song song ) {
+currentSongPointer=song.getmNumbpointer();
+       String songUri = playingList.get(currentSongPointer).getmSongPath();
         mpintro = MediaPlayer.create(mContext, Uri.parse(songUri));
         mpintro.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
@@ -68,7 +68,8 @@ public class CustomPlayer {
     }
 
     public void nextSong() {
-        currentSongPointer++;
+//        currentSongPointer=song.getmNumbpointer();currentSongPointer++;
+//        play();
     }
 
     public void pervioudSong() {

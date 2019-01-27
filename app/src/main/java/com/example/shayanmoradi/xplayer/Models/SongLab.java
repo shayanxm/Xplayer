@@ -68,7 +68,7 @@ public class SongLab {
         String thisTitle = "";
         String album = "";
         String albumTestId;
-
+        int i = 0;
         if (cur != null) {
             count = cur.getCount();
 
@@ -106,14 +106,15 @@ public class SongLab {
                     song.setmSongName(thisTitle);
                     song.setmArtistName(thisArtist);
                     song.setmAlbumArtWorkPath(albumIdSeted);
-                song.setmSongArtWorkPath(data);
+                    song.setmSongArtWorkPath(data);
+                    song.setmNumbpointer(i);
 //                    song.setmAlbumArtWorkPath(getAlbumart(mContext, Long.valueOf(albumIdSeted)));
 //                    song.setmSongArtWorkPath(getsongArtWork(data));
 //
 //
 
                     allSongs.add(song);
-
+                    i++;
                 }
 
             }
@@ -168,12 +169,13 @@ public class SongLab {
         }
         return null;
     }
-    public int getNurmberPointer(Song song){
+
+    public int getNurmberPointer(Song song) {
         List<Song> songs = getAllSongs();
-       for (int i=0;i<songs.size();i++){
-           if (songs.get(i).getmSongPath().equals(song.getmSongPath()))
-               return i;
-       }
-       return -1;
+        for (int i = 0; i < songs.size(); i++) {
+            if (songs.get(i).getmSongPath().equals(song.getmSongPath()))
+                return i;
+        }
+        return -1;
     }
 }

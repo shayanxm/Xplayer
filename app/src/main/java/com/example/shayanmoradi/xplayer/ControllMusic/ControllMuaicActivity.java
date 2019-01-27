@@ -9,7 +9,6 @@ import com.example.shayanmoradi.xplayer.R;
 import java.util.UUID;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
 public class ControllMuaicActivity extends AppCompatActivity {
     public static Intent newIntent(Context context, UUID songId) {
@@ -26,12 +25,6 @@ public class ControllMuaicActivity extends AppCompatActivity {
 
 //showDialog();
 
-        Fragment fragment =  ControlMusicFragment.newInstance(baseId);
-
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.control_continer, fragment)
-                .commit();
 
     }
 }

@@ -129,7 +129,7 @@ Song song;
                     public void onClick(View v) {
 
 
-                        CustomPlayer.getInstance(getActivity()).play(song.getmSongPath());
+                     //   CustomPlayer.getInstance(getActivity()).play(song.getmSongPath());
 
                         Intent intent = ControllMuaicActivity.newIntent(getActivity(),song.getSongId());
 
