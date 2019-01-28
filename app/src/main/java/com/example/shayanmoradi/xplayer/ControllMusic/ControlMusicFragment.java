@@ -14,19 +14,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.shayanmoradi.xplayer.Models.Album;
 import com.example.shayanmoradi.xplayer.Models.AlbumLab;
 import com.example.shayanmoradi.xplayer.Models.CustomPlayer;
 import com.example.shayanmoradi.xplayer.Models.Song;
-import com.example.shayanmoradi.xplayer.Models.SongLab;
 import com.example.shayanmoradi.xplayer.R;
 
 import java.io.FileDescriptor;
 import java.util.List;
-import java.util.UUID;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -42,10 +40,17 @@ public class ControlMusicFragment extends DialogFragment {
     private static final String ARG_CURRENT_MUSIC_POINTER = " com.example.shayanmoradi.xplayer.ControllMusic.current.music.pointer";
 
     private TextView textView;
+    private CallBacks mCallBacks;
+    public interface CallBacks {
+        public void setSong(Song song);
+        public void setImage(Song song);
+        void setTitle(String title);
+        void trueStart(boolean state);
+    }
 
-    public static ControlMusicFragment newInstance(UUID albumId,boolean trueForAlbum) {
+    public static ControlMusicFragment newInstance(String albumName,boolean trueForAlbum) {
         Bundle args = new Bundle();
-        args.putSerializable(ARG_CURRENT_MUSIC_POINTER, albumId);
+        args.putSerializable(ARG_CURRENT_MUSIC_POINTER, albumName);
         args.putSerializable("state", true);
         ControlMusicFragment fragment = new ControlMusicFragment();
         fragment.setArguments(args);
@@ -53,10 +58,17 @@ public class ControlMusicFragment extends DialogFragment {
     }
 
 
-    public ControlMusicFragment() {
-        // Required empty public constructor
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mCallBacks= (CallBacks)context;
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallBacks=null;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,11 +76,11 @@ public class ControlMusicFragment extends DialogFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_control_music, container, false);
         recyclerView = view.findViewById(R.id.rec_id);
-        UUID albumCratedId = (UUID) getArguments().getSerializable(ARG_CURRENT_MUSIC_POINTER);
-     Album album= AlbumLab.getInstance(getActivity()).getAlbum(albumCratedId);
-        //List<Song> song = AlbumLab.getInstance(getActivity()).getSongsInAlbum(album);
-      Toast.makeText(getActivity(),album.getmAlbumName(),Toast.LENGTH_SHORT).show();
-        List<Song> song = SongLab.getInstance(getActivity()).getAllSongs();
+        String albumCratedId = (String) getArguments().getSerializable(ARG_CURRENT_MUSIC_POINTER);
+   Album album= AlbumLab.getInstance(getActivity()).getAlbum(albumCratedId);
+      List<Song> song = AlbumLab.getInstance(getActivity()).getSongsInAlbum(album.getmAlbumName());
+     // Toast.makeText(getActivity(),albumCratedId,Toast.LENGTH_SHORT).show();
+       // List<Song> song = SongLab.getInstance(getActivity()).getAllSongs();
 
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -135,10 +147,10 @@ public class ControlMusicFragment extends DialogFragment {
                     @Override
                     public void onClick(View v) {
 
-//                        mCallBacks.setSong(song);
-//                        mCallBacks.setTitle(song.getmSongName());
-//                        mCallBacks.trueStart(false);
-//                        mCallBacks.setImage(song);
+                        mCallBacks.setSong(song);
+                        mCallBacks.setTitle(song.getmSongName());
+                        mCallBacks.trueStart(false);
+                        mCallBacks.setImage(song);
                         CustomPlayer.getInstance(getActivity()).start(song);
 //
 //                        //   Intent intent = ControllMuaicActivity.newIntent(getActivity(),song.getSongId());

@@ -9,7 +9,6 @@ import android.provider.MediaStore;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class AlbumLab {
     private static AlbumLab instance;
@@ -180,15 +179,26 @@ public class AlbumLab {
 //        }
 //        return null;
 //    }
-    public Album getAlbum(UUID albumId) {
+//    public Album getAlbum(UUID albumId) {
+//        List<Album> albnums = getListOfAlbums();
+//        for (int i = 0; i < albnums.size(); i++) {
+//            if (albnums.get(i).getmAlbumIdGenarated().equals(albumId))
+//
+//                return albnums.get(i);
+//        }
+//return null;
+//    }
+    //    }
+    public Album getAlbum(String albumName) {
         List<Album> albnums = getListOfAlbums();
         for (int i = 0; i < albnums.size(); i++) {
-            if (albnums.get(i).getmAlbumIdGenarated().equals(albumId))
+            if (albnums.get(i).getmAlbumName().equals(albumName))
 
                 return albnums.get(i);
         }
-return null;
+        return null;
     }
+
 
     public List<Song> getSongsInAlbum(String AlbumName) {
 

@@ -103,9 +103,9 @@ public class AlbumsFragment extends Fragment {
 
 //            holder.myTextView.setText(song.getmSongName());
 //            holder.artisName.setText(song.getmArtistName());
-//            String songPath = song.getmSongPath();
-//            Bitmap songArtWork= getsongArtWork(songPath);
-//            holder.songArtWork.setImageBitmap(songArtWork);
+          String songPath = album.getmAlbumId();
+            Bitmap songArtWork= getAlbumart(getContext(),Long.valueOf(songPath));
+        holder.songArtWork.setImageBitmap(songArtWork);
 //            holder.song= song;
             holder.album = album;
             CustomPlayer.getInstance(getActivity()).setCurrentSongPointer(position);
@@ -144,7 +144,7 @@ public class AlbumsFragment extends Fragment {
 //                        startActivity(intent);
                         //Toast.makeText(getActivity(),album.getmAlbumName()+album.getmAlbumIdGenarated(),Toast.LENGTH_SHORT).show();
                         FragmentManager fragmentManager = getFragmentManager();
-                        ControlMusicFragment detailFragment = ControlMusicFragment.newInstance(album.getmAlbumIdGenarated(),true);
+                        ControlMusicFragment detailFragment = ControlMusicFragment.newInstance(album.getmAlbumName(),true);
                         detailFragment.show(fragmentManager, "dialog");
 //                        Fragment fragment = ControlMusicFragment.newInstance(album.getmAlbumIdGenarated(),true);
 //                        getActivity().getSupportFragmentManager()

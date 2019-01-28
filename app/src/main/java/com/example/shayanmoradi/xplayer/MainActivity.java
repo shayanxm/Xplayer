@@ -13,6 +13,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.shayanmoradi.xplayer.ControllMusic.ControlMusicFragment;
 import com.example.shayanmoradi.xplayer.Models.CustomPlayer;
 import com.example.shayanmoradi.xplayer.Models.Song;
 import com.example.shayanmoradi.xplayer.ViewPagerFragments.AlbumsFragment;
@@ -31,7 +32,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-public class MainActivity extends AppCompatActivity implements SongsFragment.CallBacks {
+public class MainActivity extends AppCompatActivity implements SongsFragment.CallBacks,ControlMusicFragment.CallBacks {
     private ViewPager viewPager;
     private TabLayout tabLayout;
 
