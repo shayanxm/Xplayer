@@ -3,7 +3,6 @@ package com.example.shayanmoradi.xplayer.ViewPagerFragments;
 
 import android.content.ContentUris;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
@@ -16,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.shayanmoradi.xplayer.ControllMusic.ControllMuaicActivity;
 import com.example.shayanmoradi.xplayer.Models.CustomPlayer;
 import com.example.shayanmoradi.xplayer.Models.Song;
 import com.example.shayanmoradi.xplayer.Models.SongLab;
@@ -25,6 +23,7 @@ import com.example.shayanmoradi.xplayer.R;
 import java.io.FileDescriptor;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -36,8 +35,17 @@ import androidx.recyclerview.widget.RecyclerView;
  */
 public class SongsFragment extends Fragment {
     public static Context mContext;
-private RecyclerView recyclerView;
-MyRecyclerViewAdapter adapter;
+    private RecyclerView recyclerView;
+    MyRecyclerViewAdapter adapter;
+    private CallBacks mCallBacks;
+
+    public interface CallBacks {
+        public void setSong(Song song);
+        public void setImage(Song song);
+        void setTitle(String title);
+        void trueStart(boolean state);
+    }
+
     public static SongsFragment newInstance() {
 
         Bundle args = new Bundle();
@@ -52,6 +60,18 @@ MyRecyclerViewAdapter adapter;
     }
 
     @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mCallBacks= (CallBacks)context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallBacks=null;
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
@@ -62,8 +82,8 @@ MyRecyclerViewAdapter adapter;
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_songs, container, false);
         mContext = getActivity();
-        recyclerView= view.findViewById(R.id.rec_id);
-        List<Song>song= SongLab.getInstance(getActivity()).getAllSongs();
+        recyclerView = view.findViewById(R.id.rec_id);
+        List<Song> song = SongLab.getInstance(getActivity()).getAllSongs();
 
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -99,9 +119,9 @@ MyRecyclerViewAdapter adapter;
             holder.myTextView.setText(song.getmSongName());
             holder.artisName.setText(song.getmArtistName());
             String songPath = song.getmSongPath();
-            Bitmap songArtWork= getsongArtWork(songPath);
+            Bitmap songArtWork = getsongArtWork(songPath);
             holder.songArtWork.setImageBitmap(songArtWork);
-            holder.song= song;
+            holder.song = song;
             CustomPlayer.getInstance(getActivity()).setCurrentSongPointer(position);
         }
 
@@ -118,22 +138,27 @@ MyRecyclerViewAdapter adapter;
             TextView artisName;
             ImageView songArtWork;
 
-Song song;
+            Song song;
+
             ViewHolder(View itemView) {
                 super(itemView);
                 myTextView = itemView.findViewById(R.id.song_titile);
-                artisName= itemView.findViewById(R.id.song_artist);
-                songArtWork=itemView.findViewById(R.id.song_artWork);
+                artisName = itemView.findViewById(R.id.song_artist);
+                songArtWork = itemView.findViewById(R.id.song_artWork);
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
-
-                     //   CustomPlayer.getInstance(getActivity()).play(song.getmSongPath());
-
-                        Intent intent = ControllMuaicActivity.newIntent(getActivity(),song.getSongId());
-
-                        startActivity(intent);
+                        mCallBacks.setSong(song);
+                        mCallBacks.setTitle(song.getmSongName());
+                        mCallBacks.trueStart(false);
+//                        mCallBacks.setImage(song);
+                        CustomPlayer.getInstance(getActivity()).start(song);
+//
+//                        //   Intent intent = ControllMuaicActivity.newIntent(getActivity(),song.getSongId());
+//                        Intent intent1 = new Intent(getActivity(), MainActivity.class);
+//                        intent1.putExtra("songId", song.getSongId());
+//                        // startActivity(intent);
 
                     }
                 });
@@ -155,6 +180,7 @@ Song song;
 
         }
     }
+
     private Bitmap getsongArtWork(String path) {
         MediaMetadataRetriever mmr = new MediaMetadataRetriever();
         mmr.setDataSource(path);

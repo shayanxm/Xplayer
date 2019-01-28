@@ -23,7 +23,7 @@
 
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/small_art_work_sheet"
             android:layout_width="50dp"
             android:layout_height="50dp"
 
@@ -37,12 +37,11 @@
             android:layout_marginLeft="4dp"
             android:orientation="vertical">
 
-
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/song_title_sheet"
                 style="text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="160dp"
+                android:layout_height="22dp"
                 android:layout_marginLeft="0dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="16dp"
@@ -53,43 +52,70 @@
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/artist_name_sheet"
+                android:layout_width="110dp"
+                android:layout_height="20dp"
                 android:layout_marginLeft="0dp"
                 android:layout_marginBottom="8dp"
                 android:text="lana del ray"
                 android:textStyle="italic" />
         </LinearLayout>
 
-        <ImageButton
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginLeft="90dp"
-            android:layout_marginTop="6dp"
-            android:background="@android:drawable/ic_media_play" />
+        <LinearLayout
+            android:layout_width="match_parent"
 
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+
+                android:layout_gravity="right"
+
+                android:layout_marginTop="6dp"
+                android:background="@android:drawable/ic_media_play" />
+
+        </LinearLayout>
     </LinearLayout>
     <LinearLayout
         android:orientation="vertical"
         android:id="@+id/fragment_continer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#41413d">
+        >
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/big_art_work_sheet"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="300dp"
             app:srcCompat="@drawable/ultraviolence" />
-
-        <TextView
-            android:id="@+id/textView"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/espled_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="sssss" />
+
+            <TextView
+                android:id="@+id/remaing_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="295dp"
+                android:text="1:22" />
+        </LinearLayout>
+
+        <SeekBar
+            android:id="@+id/time_shower_seek_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
-            android:text="TextView" />
+            android:layout_marginRight="16dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -104,18 +130,21 @@
                 android:src="@android:drawable/ic_menu_directions" />
 
             <ImageButton
+                android:id="@+id/go_to_perivous-song"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:src="@android:drawable/ic_media_previous" />
 
             <ImageButton
+                android:id="@+id/pause_unpause"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:src="@android:drawable/ic_media_play" />
 
             <ImageButton
+                android:id="@+id/go_to_next_song"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
