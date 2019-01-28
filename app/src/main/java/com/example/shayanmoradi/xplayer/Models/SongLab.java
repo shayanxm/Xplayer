@@ -77,7 +77,7 @@ public class SongLab {
 
                     int titleColumn = cur.getColumnIndex(MediaStore.MediaColumns.TITLE);
                     int idColumn = cur.getColumnIndex(BaseColumns._ID);
-                    int albumIdH = cur.getColumnIndex(MediaStore.Audio.AudioColumns.ALBUM_ID);
+                    int albumIdH = cur.getColumnIndex(MediaStore.Audio.Albums._ID);
                     //   int albumIdH = cur.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ID);
                     //   int albumIdH = cur.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.ARTIST_ID);
                     int artistColumn = cur.getColumnIndex(MediaStore.Audio.AudioColumns.ARTIST);

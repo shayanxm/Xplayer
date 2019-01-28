@@ -12,6 +12,10 @@ public class Song {
     private String mAlbumId;
     private String mArtistId;
     private int mNumbpointer;
+    private UUID songId= UUID.randomUUID();
+    public String getmAlbumName() {
+        return mAlbumName;
+    }
 
     public int getmNumbpointer() {
         return mNumbpointer;
@@ -21,7 +25,7 @@ public class Song {
         this.mNumbpointer = mNumbpointer;
     }
 
-    private UUID songId= UUID.randomUUID();
+
 
     public UUID getSongId() {
         return songId;

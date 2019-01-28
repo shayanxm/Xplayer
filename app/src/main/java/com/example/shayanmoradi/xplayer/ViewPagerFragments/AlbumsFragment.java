@@ -3,7 +3,6 @@ package com.example.shayanmoradi.xplayer.ViewPagerFragments;
 
 import android.content.ContentUris;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
@@ -15,17 +14,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.shayanmoradi.xplayer.ControllMusic.ControllMuaicActivity;
+import com.example.shayanmoradi.xplayer.ControllMusic.ControlMusicFragment;
+import com.example.shayanmoradi.xplayer.Models.Album;
+import com.example.shayanmoradi.xplayer.Models.AlbumLab;
 import com.example.shayanmoradi.xplayer.Models.CustomPlayer;
 import com.example.shayanmoradi.xplayer.Models.Song;
-import com.example.shayanmoradi.xplayer.Models.SongLab;
 import com.example.shayanmoradi.xplayer.R;
 
 import java.io.FileDescriptor;
 import java.util.List;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,6 +37,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class AlbumsFragment extends Fragment {
     private RecyclerView recyclerView;
     MyRecyclerViewAdapter adapter;
+
     public static AlbumsFragment newInstance() {
 
         Bundle args = new Bundle();
@@ -53,26 +56,30 @@ public class AlbumsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.fragment_albums, container, false);
-        recyclerView= view.findViewById(R.id.rec_id);
-        List<Song>song= SongLab.getInstance(getActivity()).getAllSongs();
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
+        View view = inflater.inflate(R.layout.fragment_albums, container, false);
+        recyclerView = view.findViewById(R.id.rec_id);
+        //    List<Song>song= SongLab.getInstance(getActivity()).getAllSongs();
+        List<Album> albums = AlbumLab.getInstance(getActivity()).getListOfAlbums();
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        List<Song> songs = AlbumLab.getInstance(getActivity()).getSongsInAlbum(albums.get(3).getmAlbumName());
 
-      //  recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new AlbumsFragment.MyRecyclerViewAdapter(getActivity(), song);
+            Toast.makeText(getActivity(), songs.get(0).getmSongName() + "", Toast.LENGTH_SHORT).show();
+//Toast.makeText(getActivity(),albums.size()+"",Toast.LENGTH_SHORT).show();
 
+        // adapter = new AlbumsFragment.MyRecyclerViewAdapter(getActivity(), song);
+        adapter = new AlbumsFragment.MyRecyclerViewAdapter(getActivity(), albums);
         recyclerView.setAdapter(adapter);
         return view;
     }
 
     public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder> {
 
-        private List<Song> mData;
+        private List<Album> mData;
         private LayoutInflater mInflater;
 
 
         // data is passed into the constructor
-        MyRecyclerViewAdapter(Context context, List<Song> data) {
+        MyRecyclerViewAdapter(Context context, List<Album> data) {
             this.mInflater = LayoutInflater.from(context);
             this.mData = data;
         }
@@ -88,13 +95,19 @@ public class AlbumsFragment extends Fragment {
         // binds the data to the TextView in each row
         @Override
         public void onBindViewHolder(MyRecyclerViewAdapter.ViewHolder holder, int position) {
-            Song song = mData.get(position);
-            holder.myTextView.setText(song.getmSongName());
-            holder.artisName.setText(song.getmArtistName());
-            String songPath = song.getmSongPath();
-            Bitmap songArtWork= getsongArtWork(songPath);
-            holder.songArtWork.setImageBitmap(songArtWork);
-            holder.song= song;
+            // Song song = mData.get(position);
+            Album album = mData.get(position);
+            holder.myTextView.setText(album.getmAlbumName());
+            holder.artisName.setText(album.getmAlbumArtist());
+            // String songPath = album.getmSongPath();
+
+//            holder.myTextView.setText(song.getmSongName());
+//            holder.artisName.setText(song.getmArtistName());
+//            String songPath = song.getmSongPath();
+//            Bitmap songArtWork= getsongArtWork(songPath);
+//            holder.songArtWork.setImageBitmap(songArtWork);
+//            holder.song= song;
+            holder.album = album;
             CustomPlayer.getInstance(getActivity()).setCurrentSongPointer(position);
         }
 
@@ -111,22 +124,34 @@ public class AlbumsFragment extends Fragment {
             TextView artisName;
             ImageView songArtWork;
 
-            Song song;
+            //  Song song;
+            Album album;
+
             ViewHolder(View itemView) {
                 super(itemView);
                 myTextView = itemView.findViewById(R.id.song_titile);
-                artisName= itemView.findViewById(R.id.song_artist);
-                songArtWork=itemView.findViewById(R.id.song_artWork);
+                artisName = itemView.findViewById(R.id.song_artist);
+                songArtWork = itemView.findViewById(R.id.song_artWork);
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
 
-                       // CustomPlayer.getInstance(getActivity()).play(song.getmSongPath());
-
-                        Intent intent = ControllMuaicActivity.newIntent(getActivity(),song.getSongId());
-
-                        startActivity(intent);
+                        // CustomPlayer.getInstance(getActivity()).play(song.getmSongPath());
+//
+//                        Intent intent = ControllMuaicActivity.newIntent(getActivity(),album.getmAlbumIdGenarated(),true);
+//
+//                        startActivity(intent);
+                        //Toast.makeText(getActivity(),album.getmAlbumName()+album.getmAlbumIdGenarated(),Toast.LENGTH_SHORT).show();
+                        FragmentManager fragmentManager = getFragmentManager();
+                        ControlMusicFragment detailFragment = ControlMusicFragment.newInstance(album.getmAlbumIdGenarated(),true);
+                        detailFragment.show(fragmentManager, "dialog");
+//                        Fragment fragment = ControlMusicFragment.newInstance(album.getmAlbumIdGenarated(),true);
+//                        getActivity().getSupportFragmentManager()
+//                                .beginTransaction()
+//
+//                                .replace(R.id.continerss, fragment)
+//                                .commit();
 
                     }
                 });
@@ -148,6 +173,7 @@ public class AlbumsFragment extends Fragment {
 
         }
     }
+
     private Bitmap getsongArtWork(String path) {
         MediaMetadataRetriever mmr = new MediaMetadataRetriever();
         mmr.setDataSource(path);

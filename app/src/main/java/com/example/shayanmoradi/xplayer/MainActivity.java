@@ -13,7 +13,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.shayanmoradi.xplayer.ControllMusic.ControlMusicFragment;
 import com.example.shayanmoradi.xplayer.Models.CustomPlayer;
 import com.example.shayanmoradi.xplayer.Models.Song;
 import com.example.shayanmoradi.xplayer.ViewPagerFragments.AlbumsFragment;
@@ -134,13 +133,13 @@ public class MainActivity extends AppCompatActivity implements SongsFragment.Cal
 
         ArtistsFragment bottomNavigationFragment = ArtistsFragment.newInstance();
         adapter.addFrag(bottomNavigationFragment, "       Artist       ");
-
+        viewPager.setOffscreenPageLimit(1);
 //        TextFieldsFragment textFieldsFragment = TextFieldsFragment.newInstance();
 //        adapter.addFrag(textFieldsFragment,"Text Fields");
 
         viewPager.setAdapter(adapter);
         UUID uuid = UUID.randomUUID();
-        Fragment fragment = ControlMusicFragment.newInstance(uuid);
+
 
         new Thread(new Runnable() {
             @Override
