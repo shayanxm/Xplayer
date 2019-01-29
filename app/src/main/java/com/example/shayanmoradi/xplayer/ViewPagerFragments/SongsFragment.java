@@ -153,7 +153,7 @@ public class SongsFragment extends Fragment {
                         mCallBacks.setTitle(song.getmSongName());
                         mCallBacks.trueStart(false);
 //                        mCallBacks.setImage(song);
-                        CustomPlayer.getInstance(getActivity()).start(song);
+
 //
 //                        //   Intent intent = ControllMuaicActivity.newIntent(getActivity(),song.getSongId());
 //                        Intent intent1 = new Intent(getActivity(), MainActivity.class);

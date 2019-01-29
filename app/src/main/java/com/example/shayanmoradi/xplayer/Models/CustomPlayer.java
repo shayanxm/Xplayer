@@ -17,12 +17,14 @@ public class CustomPlayer {
     private Context mContext;
     MediaPlayer mediaPlayer = new MediaPlayer();
     public static List<Song> playingList = SongLab.getInstance().getAllSongs();
+    public static List<Song> backUpLis = SongLab.getInstance().getAllSongs();
     public Song currentSong;
 
     public static void setCurrentSongPointer(int currentSongPointer) {
         CustomPlayer.currentSongPointer = currentSongPointer;
     }
-    public boolean isPlaying(){
+
+    public boolean isPlaying() {
         return mediaPlayer.isPlaying();
     }
 
@@ -57,13 +59,16 @@ public class CustomPlayer {
         mediaPlayers = MediaPlayer.create(mContext, Uri.parse(songUri));
         int time = mediaPlayers.getDuration();
         return time;
-    }    public int getSongDuration() {
+    }
+
+    public int getSongDuration() {
 
         int time = mediaPlayer.getDuration();
         return time;
     }
 
     public void start(Song song) {
+        mediaPlayer.seekTo(0);
 
         if (!mediaPlayer.isPlaying()) {
             currentSong = song;
@@ -75,7 +80,9 @@ public class CustomPlayer {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
 
-
+//                   Song song = nextSong();
+//                    MainActivity mainActivity= new MainActivity();
+//                    mainActivity.setViewUp(song,false);
                 }
             });
 
@@ -87,7 +94,7 @@ public class CustomPlayer {
     }
 
     public void play() {
-
+        mediaPlayer.seekTo(0);
 
         currentSongPointer = currentSong.getmNumbpointer();
         String songUri = playingList.get(currentSongPointer).getmSongPath();
@@ -133,7 +140,11 @@ public class CustomPlayer {
     public Song nextSong() {
 //        currentSongPointer=song.getmNumbpointer();currentSongPointer++;
 //        play();
-        currentSong.setmNumbpointer(currentSong.getmNumbpointer() + 1);
+        if (currentSong.getmNumbpointer() + 1 <= playingList.size()) {
+            currentSong.setmNumbpointer(currentSong.getmNumbpointer() + 1);
+        } else {
+            currentSong.setmNumbpointer(playingList.size());
+        }
         play();
         currentSongPointer = currentSong.getmNumbpointer();
         return playingList.get(currentSongPointer);
@@ -142,7 +153,11 @@ public class CustomPlayer {
     public Song periviousSong() {
 //        currentSongPointer=song.getmNumbpointer();currentSongPointer++;
 //        play();
-        currentSong.setmNumbpointer(currentSong.getmNumbpointer() - 1);
+        if (currentSong.getmNumbpointer() - 1 >= 0) {
+            currentSong.setmNumbpointer(currentSong.getmNumbpointer() - 1);
+        } else {
+            currentSong.setmNumbpointer(0);
+        }
         play();
         currentSongPointer = currentSong.getmNumbpointer();
         return playingList.get(currentSongPointer);
@@ -155,6 +170,11 @@ public class CustomPlayer {
             playingList.set(i, song);
         }
     }
+
+    public void repeatSongb(boolean state) {
+        mediaPlayer.setLooping(state);
+    }
+
 
     public Song getCurrentSong() {
         return playingList.get(getCurrentSongPointer());
