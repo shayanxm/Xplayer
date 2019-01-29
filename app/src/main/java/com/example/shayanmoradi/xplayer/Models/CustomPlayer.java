@@ -22,6 +22,9 @@ public class CustomPlayer {
     public static void setCurrentSongPointer(int currentSongPointer) {
         CustomPlayer.currentSongPointer = currentSongPointer;
     }
+    public boolean isPlaying(){
+        return mediaPlayer.isPlaying();
+    }
 
     private CustomPlayer(Context context) {
         mAllSongs = new ArrayList<>();

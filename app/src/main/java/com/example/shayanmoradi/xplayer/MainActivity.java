@@ -32,7 +32,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-public class MainActivity extends AppCompatActivity implements SongsFragment.CallBacks,ControlMusicFragment.CallBacks {
+public class MainActivity extends AppCompatActivity implements SongsFragment.CallBacks, ControlMusicFragment.CallBacks {
     private ViewPager viewPager;
     private TabLayout tabLayout;
 
@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements SongsFragment.Cal
     private SeekBar duration;
     private TextView espledTime;
     private TextView remaingTime;
+    private ImageButton plaeUnPlayOnTop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements SongsFragment.Cal
         duration = findViewById(R.id.time_shower_seek_bar);
         espledTime = findViewById(R.id.espled_time);
         remaingTime = findViewById(R.id.remaing_time);
+        plaeUnPlayOnTop = findViewById(R.id.paly_pause_on_top);
 
         duration.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -91,18 +93,51 @@ public class MainActivity extends AppCompatActivity implements SongsFragment.Cal
 
 
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
-
-        pauseUnPauseSong.setOnClickListener(new View.OnClickListener() {
+        plaeUnPlayOnTop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (trueStart == true) {
                     // CustomPlayer.getInstance(MainActivity.this).start(currentSong);
                     mSeekbarUpdateHandler.postDelayed(mUpdateSeekbar, 0);
+                    if (CustomPlayer.getInstance(MainActivity.this).isPlaying()==true){
+                        CustomPlayer.getInstance(MainActivity.this).resmue();}
+                    else {
+                        CustomPlayer.getInstance(MainActivity.this).play();
+                    }
                     CustomPlayer.getInstance(MainActivity.this).resmue();
-                    pauseUnPauseSong.setBackground(MainActivity.this.getResources().getDrawable(R.drawable.icons8_play_52));
+                    pauseUnPauseSong.setBackground(MainActivity.this.getResources().getDrawable(R.drawable.pause));
+                    plaeUnPlayOnTop.setBackground(MainActivity.this.getResources().getDrawable(R.drawable.pause_2));
 
                 } else {
                     CustomPlayer.getInstance(MainActivity.this).pause();
+                    pauseUnPauseSong.setBackground(MainActivity.this.getResources().getDrawable(R.drawable.movie_player_play_button_2));
+                    plaeUnPlayOnTop.setBackground(MainActivity.this.getResources().getDrawable(R.drawable.play));
+
+                }
+                trueStart = !trueStart;
+
+            }
+        });
+        pauseUnPauseSong.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (trueStart == true) {
+                    // CustomPlayer.getInstance(MainActivity.this).start(currentSong);
+                    mSeekbarUpdateHandler.postDelayed(mUpdateSeekbar, 0);
+                    if (CustomPlayer.getInstance(MainActivity.this).isPlaying()==true){
+                    CustomPlayer.getInstance(MainActivity.this).resmue();}
+                  else {
+                        CustomPlayer.getInstance(MainActivity.this).play();
+                    }
+                    pauseUnPauseSong.setBackground(MainActivity.this.getResources().getDrawable(R.drawable.pause));
+                    plaeUnPlayOnTop.setBackground(MainActivity.this.getResources().getDrawable(R.drawable.pause_2));
+
+                } else {
+                    CustomPlayer.getInstance(MainActivity.this).pause();
+                    pauseUnPauseSong.setBackground(MainActivity.this.getResources().getDrawable(R.drawable.movie_player_play_button_2));
+                    plaeUnPlayOnTop.setBackground(MainActivity.this.getResources().getDrawable(R.drawable.play));
+
                 }
                 trueStart = !trueStart;
             }
@@ -170,11 +205,18 @@ public class MainActivity extends AppCompatActivity implements SongsFragment.Cal
         songArtWork.setImageBitmap(getsongArtWork(song.getmSongPath()));
         songTitile.setText(song.getmSongName());
         artistName.setText(song.getmArtistName());
-        bigArtWrk.setImageBitmap(getsongArtWork(song.getmSongPath()));
+        if (song.getmSongPath() != null)
+            bigArtWrk.setImageBitmap(getsongArtWork(song.getmSongPath()));
+
+        if (song.getmSongPath() == null) {
+            bigArtWrk.setBackground(MainActivity.this.getResources().getDrawable(R.drawable.noimage));
+        }
+
         duration.setMax(CustomPlayer.getInstance(MainActivity.this).getSongDuration(song));
         Toast.makeText(MainActivity.this, CustomPlayer.getInstance(MainActivity.this).getSongDuration(song) + "", Toast.LENGTH_SHORT).show();
         mSeekbarUpdateHandler.postDelayed(mUpdateSeekbar, 0);
-
+        pauseUnPauseSong.setBackground(MainActivity.this.getResources().getDrawable(R.drawable.pause));
+        plaeUnPlayOnTop.setBackground(MainActivity.this.getResources().getDrawable(R.drawable.pause_2));
     }
 
     @Override
@@ -189,6 +231,7 @@ public class MainActivity extends AppCompatActivity implements SongsFragment.Cal
         if (data != null) return BitmapFactory.decodeByteArray(data, 0, data.length);
         return null;
     }
+
 
     @Override
     public void setImage(Song song) {
@@ -248,10 +291,10 @@ public class MainActivity extends AppCompatActivity implements SongsFragment.Cal
         @Override
         public void run() {
             duration.setProgress(CustomPlayer.getInstance(MainActivity.this).getCurrentPos());
-            mSeekbarUpdateHandler.postDelayed(this, 50);
+            mSeekbarUpdateHandler.postDelayed(this, 1000);
             String elapsedTime = createTime(CustomPlayer.getInstance(MainActivity.this).getCurrentPos());
             espledTime.setText(elapsedTime);
-            int remaing = CustomPlayer.getInstance(MainActivity.this).getSongDuration()-CustomPlayer.getInstance(MainActivity.this).getCurrentPos();
+            int remaing = CustomPlayer.getInstance(MainActivity.this).getSongDuration() - CustomPlayer.getInstance(MainActivity.this).getCurrentPos();
             remaingTime.setText(createTime(remaing));
         }
     };
@@ -263,7 +306,7 @@ public class MainActivity extends AppCompatActivity implements SongsFragment.Cal
             int currentPosition = message.what;
             duration.setProgress(currentPosition);
             String elapsedTime = createTime(currentPosition);
-            espledTime.setText(elapsedTime+"wtf");
+            espledTime.setText(elapsedTime + "wtf");
             // String remaingTime=createTime(totalTime-currentPosition);
 
         }

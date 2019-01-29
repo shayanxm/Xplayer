@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/bottom_sheet"
     android:layout_width="match_parent"
     android:layout_height="530dp"
@@ -68,13 +69,15 @@
             android:orientation="vertical">
 
             <ImageButton
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:id="@+id/paly_pause_on_top"
+                android:layout_width="wrap_content"
+
+                android:layout_height="wrap_content"
 
                 android:layout_gravity="right"
-
-                android:layout_marginTop="6dp"
-                android:background="@android:drawable/ic_media_play" />
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/play" />
 
         </LinearLayout>
     </LinearLayout>
@@ -99,17 +102,19 @@
                 android:id="@+id/espled_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
                 android:text="sssss" />
 
             <TextView
                 android:id="@+id/remaing_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="295dp"
+                android:layout_marginLeft="290dp"
                 android:text="1:22" />
         </LinearLayout>
 
         <SeekBar
+
             android:id="@+id/time_shower_seek_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -126,35 +131,39 @@
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@android:drawable/ic_menu_directions" />
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="32dp"
+                android:background="@drawable/repaeting" />
 
             <ImageButton
                 android:id="@+id/go_to_perivous-song"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@android:drawable/ic_media_previous" />
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="32dp"
+                android:background="@drawable/pervious" />
 
             <ImageButton
                 android:id="@+id/pause_unpause"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@android:drawable/ic_media_play" />
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="32dp"
+                android:background="@drawable/movie_player_play_button_2" />
 
             <ImageButton
                 android:id="@+id/go_to_next_song"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@android:drawable/ic_media_next" />
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="32dp"
+                android:background="@drawable/stater" />
 
             <ImageButton
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:src="@android:drawable/ic_menu_always_landscape_portrait" />
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="32dp"
+                android:background="@drawable/shuffle" />
         </LinearLayout>
     </LinearLayout>
 
