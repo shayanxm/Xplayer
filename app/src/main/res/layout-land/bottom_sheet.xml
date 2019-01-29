@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottom_sheet"
+    android:layout_width="match_parent"
+    android:layout_height="286dp"
+    android:background="#ededed"
+    android:orientation="vertical"
+    app:behavior_hideable="false"
+    app:behavior_peekHeight="60dp"
+    app:behavior_skipCollapsed="false"
+
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:layout_gravity="bottom"
+        android:background="#dddddd"
+        android:orientation="horizontal"
+        android:text="TextView">
+
+
+        <ImageView
+            android:id="@+id/small_art_work_sheet"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="6dp"
+            app:srcCompat="@drawable/ultraviolence" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/song_title_sheet"
+                style="text"
+                android:layout_width="160dp"
+                android:layout_height="22dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="0dp"
+                android:text="Pretty when you cry"
+                android:textAllCaps="false"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/artist_name_sheet"
+                android:layout_width="110dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginBottom="8dp"
+                android:text="lana del ray"
+                android:textStyle="italic" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/paly_pause_on_top"
+                android:layout_width="wrap_content"
+
+                android:layout_height="wrap_content"
+
+                android:layout_gravity="right"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/play" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/fragment_continer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/big_art_work_sheet"
+            android:layout_width="220dp"
+            android:layout_height="226dp"
+            app:srcCompat="@drawable/ultraviolence" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="16dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/espled_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:text="2:22" />
+
+                <TextView
+                    android:id="@+id/remaing_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="264dp"
+                    android:text="1:22" />
+            </LinearLayout>
+
+            <SeekBar
+
+                android:id="@+id/time_shower_seek_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/repeat_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="60dp"
+                    android:background="@drawable/repaeting" />
+
+                <ImageButton
+                    android:id="@+id/go_to_perivous-song"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="20dp"
+                    android:background="@drawable/pervious" />
+
+                <ImageButton
+                    android:id="@+id/pause_unpause"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="20dp"
+                    android:background="@drawable/movie_player_play_button_2" />
+
+                <ImageButton
+                    android:id="@+id/go_to_next_song"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="20dp"
+                    android:background="@drawable/stater" />
+
+                <ImageButton
+                    android:id="@+id/shuffle_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="20dp"
+                    android:background="@drawable/shuffle" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
