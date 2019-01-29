@@ -17,11 +17,11 @@ public class AlbumLab {
     private Context mContext;
 
 
-
     private AlbumLab(Context context) {
         mAllAlbums = new ArrayList<>();
         this.mContext = context;
     }
+
     public ArrayList<Album> getListOfAlbums() {
 
         String where = null;
@@ -32,8 +32,8 @@ public class AlbumLab {
         final String artist = MediaStore.Audio.Albums.ARTIST;
         final String albumart = MediaStore.Audio.Albums.ALBUM_ART;
         final String tracks = MediaStore.Audio.Albums.NUMBER_OF_SONGS;
-
-        final String[] columns = { _id, album_name, artist, albumart, tracks };
+        int i = 0;
+        final String[] columns = {_id, album_name, artist, albumart, tracks};
         Cursor cursor = mContext.getContentResolver().query(uri, columns, where,
                 null, null);
 
@@ -58,6 +58,8 @@ public class AlbumLab {
 
                 albumData.setmAlbumArtWorkPath(cursor.getString(cursor
                         .getColumnIndex(albumart)));
+                albumData.setmNumbpointerAlbum(i);
+                i++;
 
 //                albumData.setTracks(cursor.getString(cursor
 //                        .getColumnIndex(tracks)));
@@ -71,6 +73,7 @@ public class AlbumLab {
 
         return list;
     }
+
     private void setAlbum() {
         //set songs here
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
@@ -99,14 +102,14 @@ public class AlbumLab {
                     int idColumn = cur.getColumnIndex(BaseColumns._ID);
                     int albumIdH = cur.getColumnIndex(MediaStore.Audio.AudioColumns.ALBUM_ID);
                     /////
-                    int albumIdsecond=  cur.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ID);
-                    int artistName=  cur.getColumnIndex(MediaStore.Audio.Albums.ARTIST);
-                    int albumNAme=  cur.getColumnIndex(MediaStore.Audio.Albums.ALBUM);
-                    String albumIdf=cur.getString(albumIdsecond);
-                    String artistamef=cur.getString(artistName);
-                    String albbumNamef=cur.getString(albumNAme);
+                    int albumIdsecond = cur.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ID);
+                    int artistName = cur.getColumnIndex(MediaStore.Audio.Albums.ARTIST);
+                    int albumNAme = cur.getColumnIndex(MediaStore.Audio.Albums.ALBUM);
+                    String albumIdf = cur.getString(albumIdsecond);
+                    String artistamef = cur.getString(artistName);
+                    String albbumNamef = cur.getString(albumNAme);
 
-                    Album album1= new Album(albumIdf);
+                    Album album1 = new Album(albumIdf);
                     album1.setmAlbumName(artistamef);
                     album1.setmAlbumArtist(albbumNamef);
                     album1.setmAlbumArtWorkPath(albumIdf);
@@ -170,7 +173,7 @@ public class AlbumLab {
         return albumList;
     }
 
-//    public Album getAlbum(String AlbumName) {
+    //    public Album getAlbum(String AlbumName) {
 //        //search for song
 //        List<Album> albnums = getAllAllbums();
 //        for (int i = 0; i < albnums.size(); i++) {
@@ -206,12 +209,15 @@ public class AlbumLab {
         List<Song> resulat = new ArrayList<>();
 
 //        String albumId = album.getmAlbumId();
-
+        int numb = 0;
         for (int i = 0; i < song.size(); i++) {
 
             String songAlubumName = song.get(i).getmAlbumName();
-            if (AlbumName.equals(songAlubumName))
+            if (AlbumName.equals(songAlubumName)) {
+                song.get(i).setInAlbumNumbPointer(numb);
                 resulat.add(song.get(i));
+                numb++;
+            }
         }
         return resulat;
     }

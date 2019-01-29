@@ -11,6 +11,25 @@ public class Song {
     private String mArtistName;
     private String mAlbumId;
     private String mArtistId;
+    private int inAlbumNumbPointer;
+    private int zeroSongOneAlbum;
+
+    public int getZeroSongOneAlbum() {
+        return zeroSongOneAlbum;
+    }
+
+    public void setZeroSongOneAlbum(int zeroSongOneAlbum) {
+        this.zeroSongOneAlbum = zeroSongOneAlbum;
+    }
+
+    public int getInAlbumNumbPointer() {
+        return inAlbumNumbPointer;
+    }
+
+    public void setInAlbumNumbPointer(int inAlbumNumbPointer) {
+        this.inAlbumNumbPointer = inAlbumNumbPointer;
+    }
+
     private int mNumbpointer;
     private UUID songId= UUID.randomUUID();
     public String getmAlbumName() {

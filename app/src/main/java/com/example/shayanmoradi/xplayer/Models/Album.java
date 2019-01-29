@@ -10,6 +10,18 @@ public class Album {
     private String mAlbumArtWorkPath;
     private List<Song> mSongList;
     private UUID mAlbumIdGenarated= UUID.randomUUID();
+    private int mNumbpointerAlbum;
+
+
+
+    public int getmNumbpointerAlbum() {
+        return mNumbpointerAlbum;
+    }
+
+    public void setmNumbpointerAlbum(int mNumbpointer) {
+        this.mNumbpointerAlbum = mNumbpointer;
+    }
+
 
     public UUID getmAlbumIdGenarated() {
         return mAlbumIdGenarated;

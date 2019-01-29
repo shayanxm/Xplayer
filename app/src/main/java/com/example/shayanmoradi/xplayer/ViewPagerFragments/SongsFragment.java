@@ -41,8 +41,11 @@ public class SongsFragment extends Fragment {
 
     public interface CallBacks {
         public void setSong(Song song);
+
         public void setImage(Song song);
+
         void setTitle(String title);
+
         void trueStart(boolean state);
     }
 
@@ -62,13 +65,13 @@ public class SongsFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        mCallBacks= (CallBacks)context;
+        mCallBacks = (CallBacks) context;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mCallBacks=null;
+        mCallBacks = null;
     }
 
     @Override
@@ -148,7 +151,9 @@ public class SongsFragment extends Fragment {
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        CustomPlayer.getInstance(getActivity()).resetListBackToSongs();
+                        CustomPlayer.setCurrentSongPointer(0);
+                        song.setZeroSongOneAlbum(0);
                         mCallBacks.setSong(song);
                         mCallBacks.setTitle(song.getmSongName());
                         mCallBacks.trueStart(false);

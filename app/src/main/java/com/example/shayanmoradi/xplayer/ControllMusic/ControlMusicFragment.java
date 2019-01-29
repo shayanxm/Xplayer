@@ -36,19 +36,23 @@ import androidx.recyclerview.widget.RecyclerView;
  */
 public class ControlMusicFragment extends DialogFragment {
     private RecyclerView recyclerView;
- MyRecyclerViewAdapter adapter;
+    MyRecyclerViewAdapter adapter;
     private static final String ARG_CURRENT_MUSIC_POINTER = " com.example.shayanmoradi.xplayer.ControllMusic.current.music.pointer";
 
     private TextView textView;
     private CallBacks mCallBacks;
+
     public interface CallBacks {
         public void setSong(Song song);
+
         public void setImage(Song song);
+
         void setTitle(String title);
+
         void trueStart(boolean state);
     }
 
-    public static ControlMusicFragment newInstance(String albumName,boolean trueForAlbum) {
+    public static ControlMusicFragment newInstance(String albumName, boolean trueForAlbum) {
         Bundle args = new Bundle();
         args.putSerializable(ARG_CURRENT_MUSIC_POINTER, albumName);
         args.putSerializable("state", true);
@@ -61,13 +65,13 @@ public class ControlMusicFragment extends DialogFragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        mCallBacks= (CallBacks)context;
+        mCallBacks = (CallBacks) context;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mCallBacks=null;
+        mCallBacks = null;
     }
 
     @Override
@@ -77,10 +81,11 @@ public class ControlMusicFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_control_music, container, false);
         recyclerView = view.findViewById(R.id.rec_id);
         String albumCratedId = (String) getArguments().getSerializable(ARG_CURRENT_MUSIC_POINTER);
-   Album album= AlbumLab.getInstance(getActivity()).getAlbum(albumCratedId);
-      List<Song> song = AlbumLab.getInstance(getActivity()).getSongsInAlbum(album.getmAlbumName());
-     // Toast.makeText(getActivity(),albumCratedId,Toast.LENGTH_SHORT).show();
-       // List<Song> song = SongLab.getInstance(getActivity()).getAllSongs();
+        Album album = AlbumLab.getInstance(getActivity()).getAlbum(albumCratedId);
+        List<Song> song = AlbumLab.getInstance(getActivity()).getSongsInAlbum(album.getmAlbumName());
+        CustomPlayer.getInstance(getActivity()).setAlbumList(song);
+        // Toast.makeText(getActivity(),albumCratedId,Toast.LENGTH_SHORT).show();
+        // List<Song> song = SongLab.getInstance(getActivity()).getAllSongs();
 
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -146,11 +151,12 @@ public class ControlMusicFragment extends DialogFragment {
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        song.setZeroSongOneAlbum(1);
                         mCallBacks.setSong(song);
                         mCallBacks.setTitle(song.getmSongName());
                         mCallBacks.trueStart(false);
                         mCallBacks.setImage(song);
+
                         CustomPlayer.getInstance(getActivity()).start(song);
 //
 //                        //   Intent intent = ControllMuaicActivity.newIntent(getActivity(),song.getSongId());

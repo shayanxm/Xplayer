@@ -12,13 +12,26 @@ public class CustomPlayer {
 
     public static List<Song> shufflelist;
     public static int currentSongPointer = 0;
+    public static int currentSongAlbumPointer = 0;
     private static CustomPlayer instance;
     ArrayList<Song> mAllSongs;
     private Context mContext;
     MediaPlayer mediaPlayer = new MediaPlayer();
     public static List<Song> playingList = SongLab.getInstance().getAllSongs();
-    public static List<Song> backUpLis = SongLab.getInstance().getAllSongs();
+    public static List<Song> backUpLis;
     public Song currentSong;
+//only when you should reset
+
+    public void setAlbumList(List<Song> albumSongs) {
+        playingList = albumSongs;
+
+        backUpLis = playingList;
+    }
+
+    public void resetListBackToSongs() {
+        playingList = SongLab.getInstance().getAllSongs();
+
+    }
 
     public static void setCurrentSongPointer(int currentSongPointer) {
         CustomPlayer.currentSongPointer = currentSongPointer;
@@ -72,8 +85,11 @@ public class CustomPlayer {
 
         if (!mediaPlayer.isPlaying()) {
             currentSong = song;
-
-            currentSongPointer = song.getmNumbpointer();
+            if (song.getZeroSongOneAlbum() == 0) {
+                currentSongPointer = song.getmNumbpointer();
+            } else if (song.getZeroSongOneAlbum() == 1) {
+                currentSongPointer = song.getInAlbumNumbPointer();
+            }
             String songUri = playingList.get(currentSongPointer).getmSongPath();
             mediaPlayer = MediaPlayer.create(mContext, Uri.parse(songUri));
             mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -95,8 +111,12 @@ public class CustomPlayer {
 
     public void play() {
         mediaPlayer.seekTo(0);
+        if (currentSong.getZeroSongOneAlbum() == 0) {
+            currentSongPointer = currentSong.getmNumbpointer();
+        } else if (currentSong.getZeroSongOneAlbum() == 1) {
+            currentSongPointer = currentSong.getInAlbumNumbPointer();
+        }
 
-        currentSongPointer = currentSong.getmNumbpointer();
         String songUri = playingList.get(currentSongPointer).getmSongPath();
         mediaPlayer = MediaPlayer.create(mContext, Uri.parse(songUri));
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -132,36 +152,67 @@ public class CustomPlayer {
     }
 
     public void unShuffle() {
-
-        playingList = SongLab.getInstance().getAllSongs();
+        if (currentSong.getZeroSongOneAlbum() == 0) {
+            playingList = SongLab.getInstance().getAllSongs();
+        } else if (currentSong.getZeroSongOneAlbum() == 1) {
+            playingList = backUpLis;
+        }
 
     }
 
     public Song nextSong() {
+        if (currentSong.getZeroSongOneAlbum() == 0) {
 //        currentSongPointer=song.getmNumbpointer();currentSongPointer++;
 //        play();
-        if (currentSong.getmNumbpointer() + 1 <= playingList.size()) {
-            currentSong.setmNumbpointer(currentSong.getmNumbpointer() + 1);
-        } else {
-            currentSong.setmNumbpointer(playingList.size());
+            if (currentSong.getmNumbpointer() + 1 <= playingList.size()) {
+                currentSong.setmNumbpointer(currentSong.getmNumbpointer() + 1);
+            } else {
+                currentSong.setmNumbpointer(playingList.size());
+            }
+        } else if (currentSong.getZeroSongOneAlbum() == 1) {
+            if (currentSong.getInAlbumNumbPointer() + 1 <= playingList.size()) {
+                currentSong.setInAlbumNumbPointer(currentSong.getInAlbumNumbPointer() + 1);
+            } else {
+                currentSong.setInAlbumNumbPointer(playingList.size());
+            }
         }
         play();
-        currentSongPointer = currentSong.getmNumbpointer();
+        if (currentSong.getZeroSongOneAlbum() == 0) {
+            currentSongPointer = currentSong.getmNumbpointer();
+        } else if (currentSong.getZeroSongOneAlbum() == 1) {
+            currentSongPointer = currentSong.getInAlbumNumbPointer();
+        }
         return playingList.get(currentSongPointer);
     }
+
 
     public Song periviousSong() {
 //        currentSongPointer=song.getmNumbpointer();currentSongPointer++;
 //        play();
-        if (currentSong.getmNumbpointer() - 1 >= 0) {
-            currentSong.setmNumbpointer(currentSong.getmNumbpointer() - 1);
-        } else {
-            currentSong.setmNumbpointer(0);
+        if (currentSong.getZeroSongOneAlbum() == 0) {
+//        currentSongPointer=song.getmNumbpointer();currentSongPointer++;
+//        play();
+            if (currentSong.getmNumbpointer() - 1 <= 0) {
+                currentSong.setmNumbpointer(currentSong.getmNumbpointer() - 1);
+            } else {
+                currentSong.setmNumbpointer(0);
+            }
+        } else if (currentSong.getZeroSongOneAlbum() == 1) {
+            if (currentSong.getInAlbumNumbPointer() - 1 <= playingList.size()) {
+                currentSong.setInAlbumNumbPointer(currentSong.getInAlbumNumbPointer() - 1);
+            } else {
+                currentSong.setInAlbumNumbPointer(0);
+            }
         }
         play();
-        currentSongPointer = currentSong.getmNumbpointer();
+        if (currentSong.getZeroSongOneAlbum() == 0) {
+            currentSongPointer = currentSong.getmNumbpointer();
+        } else if (currentSong.getZeroSongOneAlbum() == 1) {
+            currentSongPointer = currentSong.getInAlbumNumbPointer();
+        }
         return playingList.get(currentSongPointer);
     }
+
 
     public void repeatSong() {
         Song song = playingList.get(currentSongPointer);
