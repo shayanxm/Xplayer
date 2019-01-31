@@ -146,6 +146,7 @@ public class AlbumsFragment extends Fragment {
                         FragmentManager fragmentManager = getFragmentManager();
                         ControlMusicFragment detailFragment = ControlMusicFragment.newInstance(album.getmAlbumName(),true);
                         detailFragment.show(fragmentManager, "dialog");
+
 //                        Fragment fragment = ControlMusicFragment.newInstance(album.getmAlbumIdGenarated(),true);
 //                        getActivity().getSupportFragmentManager()
 //                                .beginTransaction()

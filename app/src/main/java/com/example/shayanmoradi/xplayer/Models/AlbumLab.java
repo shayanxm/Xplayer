@@ -20,6 +20,7 @@ public class AlbumLab {
     private AlbumLab(Context context) {
         mAllAlbums = new ArrayList<>();
         this.mContext = context;
+
     }
 
     public ArrayList<Album> getListOfAlbums() {

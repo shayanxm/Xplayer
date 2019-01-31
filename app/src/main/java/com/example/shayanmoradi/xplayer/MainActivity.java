@@ -5,7 +5,6 @@ import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -13,6 +12,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.shayanmoradi.xplayer.ControllMusic.ControlArtistFragment;
 import com.example.shayanmoradi.xplayer.ControllMusic.ControlMusicFragment;
 import com.example.shayanmoradi.xplayer.Models.CustomPlayer;
 import com.example.shayanmoradi.xplayer.Models.Song;
@@ -20,20 +20,21 @@ import com.example.shayanmoradi.xplayer.Models.SongLab;
 import com.example.shayanmoradi.xplayer.ViewPagerFragments.AlbumsFragment;
 import com.example.shayanmoradi.xplayer.ViewPagerFragments.ArtistsFragment;
 import com.example.shayanmoradi.xplayer.ViewPagerFragments.SongsFragment;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-public class MainActivity extends AppCompatActivity implements SongsFragment.CallBacks, ControlMusicFragment.CallBacks {
+public class MainActivity extends AppCompatActivity implements SongsFragment.CallBacks, ControlMusicFragment.CallBacks,ControlArtistFragment.CallBacks {
     private ViewPager viewPager;
     private TabLayout tabLayout;
 
@@ -57,26 +58,47 @@ public class MainActivity extends AppCompatActivity implements SongsFragment.Cal
     private ImageButton repeatSong;
     private ImageButton shuffleSongs;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        tabLayout = findViewById(R.id.tabs);
-        viewPager = findViewById(R.id.viewPager);
-        goToNextSong = findViewById(R.id.go_to_next_song);
-        songArtWork = findViewById(R.id.small_art_work_sheet);
-        bigArtWrk = findViewById(R.id.big_art_work_sheet);
-        gotToPerivousSong = findViewById(R.id.go_to_perivous_song);
-        songTitile = findViewById(R.id.song_title_sheet);
-        artistName = findViewById(R.id.artist_name_sheet);
-        duration = findViewById(R.id.time_shower_seek_bar);
-        espledTime = findViewById(R.id.espled_time);
-        remaingTime = findViewById(R.id.remaing_time);
-        plaeUnPlayOnTop = findViewById(R.id.paly_pause_on_top);
-        repeatSong = findViewById(R.id.repeat_btn);
-        shuffleSongs = findViewById(R.id.shuffle_btn);
+        /////
+        castView();
+        ///
+        View bottomSheet = findViewById(R.id.tes);
+
+        BottomSheetBehavior.from(bottomSheet).setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        Toast.makeText(MainActivity.this, "open", Toast.LENGTH_SHORT).show();
+                        break;
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        Toast.makeText(MainActivity.this, "close", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                // no op
+            }
+        });
+
+
+///get song when origtion changes
         currentSong = SongLab.getInstance(MainActivity.this).getAllSongs().get(0);
-        setViewUp(currentSong,true);
+        if (savedInstanceState != null) {
+
+            String test = savedInstanceState.getString("AStringKey");
+            Song song = SongLab.getInstance(MainActivity.this).getSong(test);
+            currentSong = song;
+        }
+
+        setViewUp(currentSong, true);
+        setViewOnrotate(currentSong);
         shuffleSongs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,7 +115,6 @@ public class MainActivity extends AppCompatActivity implements SongsFragment.Cal
 
             }
         });
-
 
         repeatSong.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -180,19 +201,43 @@ public class MainActivity extends AppCompatActivity implements SongsFragment.Cal
                 CustomPlayer.getInstance(MainActivity.this).pause();
                 currentSong = CustomPlayer.getInstance(MainActivity.this).nextSong();
 
-                setViewUp(currentSong,false);
+                setViewUp(currentSong, false);
             }
         });
+
         gotToPerivousSong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 CustomPlayer.getInstance(MainActivity.this).pause();
                 currentSong = CustomPlayer.getInstance(MainActivity.this).periviousSong();
 
-                setViewUp(currentSong,false);
+                setViewUp(currentSong, false);
             }
         });
 
+        setViewPagerUp();
+
+
+//
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                while (true) {
+//                    try {
+//                        Message message = new Message();
+//                        message.what = CustomPlayer.getInstance(MainActivity.this).getCurrentPos();
+//                        handler.sendMessage(message);
+//                        Thread.sleep(100000);
+//                    } catch (InterruptedException e) {
+//                        Toast.makeText(MainActivity.this, "", Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//
+//            }
+//        });
+    }
+
+    private void setViewPagerUp() {
         SongsFragment topAppBarFragment = SongsFragment.newInstance();
         adapter.addFrag(topAppBarFragment, "         Songs          ");
 
@@ -206,25 +251,29 @@ public class MainActivity extends AppCompatActivity implements SongsFragment.Cal
 //        adapter.addFrag(textFieldsFragment,"Text Fields");
 
         viewPager.setAdapter(adapter);
-        UUID uuid = UUID.randomUUID();
+    }
 
+    private void castView() {
+        tabLayout = findViewById(R.id.tabs);
+        viewPager = findViewById(R.id.viewPager);
+        goToNextSong = findViewById(R.id.go_to_next_song);
+        songArtWork = findViewById(R.id.small_art_work_sheet);
+        bigArtWrk = findViewById(R.id.big_art_work_sheet);
+        gotToPerivousSong = findViewById(R.id.go_to_perivous_song);
+        songTitile = findViewById(R.id.song_title_sheet);
+        artistName = findViewById(R.id.artist_name_sheet);
+        duration = findViewById(R.id.time_shower_seek_bar);
+        espledTime = findViewById(R.id.espled_time);
+        remaingTime = findViewById(R.id.remaing_time);
+        plaeUnPlayOnTop = findViewById(R.id.paly_pause_on_top);
+        repeatSong = findViewById(R.id.repeat_btn);
+        shuffleSongs = findViewById(R.id.shuffle_btn);
+    }
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    try {
-                        Message message = new Message();
-                        message.what = CustomPlayer.getInstance(MainActivity.this).getCurrentPos();
-                        handler.sendMessage(message);
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        Toast.makeText(MainActivity.this, "", Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-            }
-        });
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("AStringKey", currentSong.getmSongPath());
     }
 
     @Override
@@ -232,7 +281,7 @@ public class MainActivity extends AppCompatActivity implements SongsFragment.Cal
         currentSong = song;
         CustomPlayer.getInstance(MainActivity.this).pause();
         CustomPlayer.getInstance(MainActivity.this).start(song);
-        setViewUp(song,false);
+        setViewUp(song, false);
     }
 
     public void setViewUp(Song song, boolean start) {
@@ -253,6 +302,27 @@ public class MainActivity extends AppCompatActivity implements SongsFragment.Cal
             pauseUnPauseSong.setBackground(MainActivity.this.getResources().getDrawable(R.drawable.pause));
             plaeUnPlayOnTop.setBackground(MainActivity.this.getResources().getDrawable(R.drawable.pause_2));
         }
+    }
+
+    @Override
+    public void setViewOnrotate(Song song) {
+        songArtWork.setImageBitmap(getsongArtWork(song.getmSongPath()));
+        songTitile.setText(song.getmSongName());
+        artistName.setText(song.getmArtistName());
+        if (song.getmSongPath() != null)
+            bigArtWrk.setImageBitmap(getsongArtWork(song.getmSongPath()));
+
+        if (song.getmSongPath() == null) {
+            bigArtWrk.setBackground(MainActivity.this.getResources().getDrawable(R.drawable.noimage));
+        }
+
+        duration.setMax(CustomPlayer.getInstance(MainActivity.this).getSongDuration(song));
+        Toast.makeText(MainActivity.this, CustomPlayer.getInstance(MainActivity.this).getSongDuration(song) + "", Toast.LENGTH_SHORT).show();
+        mSeekbarUpdateHandler.postDelayed(mUpdateSeekbar, 50);
+
+//            pauseUnPauseSong.setBackground(MainActivity.this.getResources().getDrawable(R.drawable.pause));
+//            plaeUnPlayOnTop.setBackground(MainActivity.this.getResources().getDrawable(R.drawable.pause_2));
+//
     }
 
     @Override
@@ -335,18 +405,19 @@ public class MainActivity extends AppCompatActivity implements SongsFragment.Cal
         }
     };
 
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message message) {
-            String onlyTemp;
-            int currentPosition = message.what;
-            duration.setProgress(currentPosition);
-            String elapsedTime = createTime(currentPosition);
-            espledTime.setText(elapsedTime + "wtf");
-            // String remaingTime=createTime(totalTime-currentPosition);
 
-        }
-    };
+//    private Handler handler = new Handler() {
+//        @Override
+//        public void handleMessage(Message message) {
+//            String onlyTemp;
+//            int currentPosition = message.what;
+//            duration.setProgress(currentPosition);
+//            String elapsedTime = createTime(currentPosition);
+//            espledTime.setText(elapsedTime + "wtf");
+//            // String remaingTime=createTime(totalTime-currentPosition);
+//
+//        }
+//    };
 
     private String createTime(int time) {
         String timeLabe = "";

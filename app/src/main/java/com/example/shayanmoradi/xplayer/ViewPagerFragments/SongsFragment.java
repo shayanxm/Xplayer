@@ -47,6 +47,7 @@ public class SongsFragment extends Fragment {
         void setTitle(String title);
 
         void trueStart(boolean state);
+        void setViewOnrotate(Song song);
     }
 
     public static SongsFragment newInstance() {
@@ -157,6 +158,7 @@ public class SongsFragment extends Fragment {
                         mCallBacks.setSong(song);
                         mCallBacks.setTitle(song.getmSongName());
                         mCallBacks.trueStart(false);
+                        mCallBacks.setViewOnrotate(song);
 //                        mCallBacks.setImage(song);
 
 //

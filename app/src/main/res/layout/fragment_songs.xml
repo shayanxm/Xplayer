@@ -10,7 +10,7 @@
     <LinearLayout
         android:id="@+id/continerss"
         android:layout_width="match_parent"
-        android:layout_height="490dp"
+        android:layout_height="480dp"
         android:orientation="vertical">
 
 

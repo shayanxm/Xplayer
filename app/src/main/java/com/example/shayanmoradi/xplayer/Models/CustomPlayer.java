@@ -226,6 +226,10 @@ public class CustomPlayer {
         mediaPlayer.setLooping(state);
     }
 
+    public void repeatPlayList() {
+
+
+    }
 
     public Song getCurrentSong() {
         return playingList.get(getCurrentSongPointer());
