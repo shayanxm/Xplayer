@@ -104,7 +104,7 @@ public class ArtistsFragment extends Fragment {
 //            holder.artisName.setText(song.getmArtistName());
            String songPath = album.getmPhotoPath();
         Bitmap songArtWork= getAlbumart(getContext(),Long.valueOf(songPath));
-//       holder.songArtWork.setImageBitmap(songArtWork);
+     holder.songArtWork.setImageBitmap(songArtWork);
 //            holder.song= song;
             holder.album = album;
             CustomPlayer.getInstance(getActivity()).setCurrentSongPointer(position);

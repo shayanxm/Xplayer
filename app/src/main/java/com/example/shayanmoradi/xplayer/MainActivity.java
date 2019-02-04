@@ -20,7 +20,10 @@ import com.example.shayanmoradi.xplayer.Models.Song;
 import com.example.shayanmoradi.xplayer.Models.SongLab;
 import com.example.shayanmoradi.xplayer.ViewPagerFragments.AlbumsFragment;
 import com.example.shayanmoradi.xplayer.ViewPagerFragments.ArtistsFragment;
+import com.example.shayanmoradi.xplayer.ViewPagerFragments.LovesFragment;
 import com.example.shayanmoradi.xplayer.ViewPagerFragments.SongsFragment;
+import com.example.shayanmoradi.xplayer.database.LoveList;
+import com.example.shayanmoradi.xplayer.database.LoveListLab;
 import com.example.shayanmoradi.xplayer.database.SongDetailLab;
 import com.example.shayanmoradi.xplayer.database.SongDetails;
 import com.example.shayanmoradi.xplayer.lyricsStuffs.EditLyricTextFragment;
@@ -40,7 +43,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-public class MainActivity extends AppCompatActivity implements SongsFragment.CallBacks, ControlMusicFragment.CallBacks, ControlArtistFragment.CallBacks {
+public class MainActivity extends AppCompatActivity implements SongsFragment.CallBacks, ControlMusicFragment.CallBacks, ControlArtistFragment.CallBacks,LovesFragment.CallBacks {
     private ViewPager viewPager;
     private TabLayout tabLayout;
 
@@ -53,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements SongsFragment.Cal
     private boolean repeat = true;
     private boolean shuffle = true;
     private boolean lyrics = false;
+    private boolean love = false;
     private Song currentSong;
     private ImageView songArtWork;
     public TextView songTitile;
@@ -68,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements SongsFragment.Cal
     private TextView lyricsShower;
     private View bottomSheet;
     private View ViewPagerContiner;
+    private ImageButton addToLoveList;
     private Toolbar xPlayerToolBar;
     SongDetails songDetailsGet;
     int xCharPointerToFirst = 0;
@@ -170,6 +175,24 @@ public class MainActivity extends AppCompatActivity implements SongsFragment.Cal
                 lyrics = !lyrics;
             }
         });
+        addToLoveList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (love == true) {
+
+                    addToLoveList.setBackground(MainActivity.this.getResources().getDrawable(R.drawable.like_3));
+                } else {
+                    LoveList loveList = new LoveList();
+                    loveList.setLovedSongName(currentSong.getmSongName());
+
+                    //   songDetailsGet = LoveListLab.getInstance(MainActivity.this).getAllLovedSongsName();
+
+                    LoveListLab.getInstance(MainActivity.this).addToLove(loveList);
+                    addToLoveList.setBackground(MainActivity.this.getResources().getDrawable(R.drawable.like));
+                }
+                love = !love;
+            }
+        });
         shuffleSongs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -186,18 +209,18 @@ public class MainActivity extends AppCompatActivity implements SongsFragment.Cal
 
             }
         });
-      bigArtWrk.setOnLongClickListener(new View.OnLongClickListener() {
-          @Override
-          public boolean onLongClick(View v) {
-              EditLyricTextFragment datePickerFragment = EditLyricTextFragment.newInstance(currentSong.getmSongName());
+        bigArtWrk.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                EditLyricTextFragment datePickerFragment = EditLyricTextFragment.newInstance(currentSong.getmSongName());
 //        datePickerFragment.setTargetFragment(GetInfoFragment.this,
 //                REQ_DATE_PICKER);
-              //   datePickerFragment.show(FragmentManager, "he");
-              Intent intent = LyricsActivity.newIntent(MainActivity.this, currentSong.getmSongName());
-              startActivity(intent);
-              return false;
-          }
-      });
+                //   datePickerFragment.show(FragmentManager, "he");
+                Intent intent = LyricsActivity.newIntent(MainActivity.this, currentSong.getmSongName());
+                startActivity(intent);
+                return false;
+            }
+        });
 //        bigArtWrk.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -340,6 +363,8 @@ public class MainActivity extends AppCompatActivity implements SongsFragment.Cal
 
         ArtistsFragment bottomNavigationFragment = ArtistsFragment.newInstance();
         adapter.addFrag(bottomNavigationFragment, "       Artist       ");
+        LovesFragment lovesFragment = LovesFragment.newInstance();
+        adapter.addFrag(lovesFragment, "       loves       ");
         viewPager.setOffscreenPageLimit(1);
 //        TextFieldsFragment textFieldsFragment = TextFieldsFragment.newInstance();
 //        adapter.addFrag(textFieldsFragment,"Text Fields");
@@ -366,6 +391,7 @@ public class MainActivity extends AppCompatActivity implements SongsFragment.Cal
         lyricsShower = findViewById(R.id.lyrics_shower);
         bottomSheet = findViewById(R.id.bottom_sheet);
         xPlayerToolBar = findViewById(R.id.x_palyer);
+        addToLoveList = findViewById(R.id.add_to_love);
 
     }
 

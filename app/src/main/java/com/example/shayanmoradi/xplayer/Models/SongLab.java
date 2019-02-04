@@ -169,6 +169,15 @@ public class SongLab {
         }
         return null;
     }
+    public Song getSongName(String mSongPath) {
+        //search for song
+        List<Song> songs = getAllSongs();
+        for (int i = 0; i < songs.size(); i++) {
+            if (songs.get(i).getmSongName().equals(mSongPath))
+                return songs.get(i);
+        }
+        return null;
+    }
 
     public Song getSongFromName(String songName) {
         //search for song
@@ -193,8 +202,8 @@ public class SongLab {
         List<Song> songList = new ArrayList<>();
         for (int i = 0; i < songsNames.size(); i++) {
 
-            if (getSong(songsNames.get(i)) != null)
-                songList.add(getSong(songsNames.get(i)));
+            if (getSongName(songsNames.get(i)) != null)
+                songList.add(getSongName(songsNames.get(i)));
         }
         return songList;
     }
