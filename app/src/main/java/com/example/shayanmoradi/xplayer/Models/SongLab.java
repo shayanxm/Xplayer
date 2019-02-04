@@ -194,7 +194,7 @@ public class SongLab {
         //search for song
 
         List<Song>result=new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 100; i++) {
             if (mAllSongs.get(i).getmSongName().contains(songName))
                 result.add(mAllSongs.get(i));
         }

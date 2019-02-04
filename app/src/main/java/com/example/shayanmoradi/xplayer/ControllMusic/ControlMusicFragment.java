@@ -20,6 +20,7 @@ import com.example.shayanmoradi.xplayer.Models.AlbumLab;
 import com.example.shayanmoradi.xplayer.Models.CustomPlayer;
 import com.example.shayanmoradi.xplayer.Models.Song;
 import com.example.shayanmoradi.xplayer.R;
+import com.example.shayanmoradi.xplayer.ViewPagerFragments.SongsFragment;
 
 import java.io.FileDescriptor;
 import java.util.List;
@@ -65,7 +66,8 @@ public class ControlMusicFragment extends DialogFragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        mCallBacks = (CallBacks) context;
+        Context context1 = SongsFragment.contextofMain;
+        mCallBacks = (CallBacks) context1;
     }
 
     @Override

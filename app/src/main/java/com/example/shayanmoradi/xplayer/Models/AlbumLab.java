@@ -20,10 +20,15 @@ public class AlbumLab {
     private AlbumLab(Context context) {
         mAllAlbums = new ArrayList<>();
         this.mContext = context;
+        getListOfAlbum();
 
     }
 
-    public ArrayList<Album> getListOfAlbums() {
+    public List<Album> getListOfAlbums() {
+        return mAllAlbums;
+    }
+
+    public void getListOfAlbum() {
 
         String where = null;
 
@@ -72,7 +77,7 @@ public class AlbumLab {
 
         cursor.close();
 
-        return list;
+        mAllAlbums = list;
     }
 
     private void setAlbum() {
@@ -222,14 +227,15 @@ public class AlbumLab {
         }
         return resulat;
     }
+
     public List<Album> searchAlbumsFromName(String albumName) {
         //search for song
-        List<Album> albums = getAllAllbums();
-        for (int i = 0; i < albums.size(); i++) {
-            if (albums.get(i).getmAlbumName().contains(albumName))
-                albums.add(albums.get(i));
+        List<Album> result = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            if (mAllAlbums.get(i).getmAlbumName().contains(albumName))
+                result.add(mAllAlbums.get(i));
         }
-        return albums;
+        return result;
     }
 //
 //    public List<Song> getSongsInAlbum(Album album) {
