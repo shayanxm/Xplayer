@@ -27,7 +27,8 @@
             android:resource="@array/preloaded_fonts" />
 
         <activity android:name=".lyricsStuffs.LyricsActivity" />
-        <activity android:name=".lyricsStuffs.SyncActivity"></activity>
+        <activity android:name=".lyricsStuffs.SyncActivity" />
+        <activity android:name=".search.Search2Activity"></activity>
     </application>
 
 </manifest>

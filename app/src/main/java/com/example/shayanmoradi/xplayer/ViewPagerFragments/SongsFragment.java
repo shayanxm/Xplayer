@@ -38,6 +38,7 @@ public class SongsFragment extends Fragment {
     private RecyclerView recyclerView;
     MyRecyclerViewAdapter adapter;
     private CallBacks mCallBacks;
+    public static Context contextofMain;
 
     public interface CallBacks {
         public void setSong(Song song);
@@ -66,6 +67,7 @@ public class SongsFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
+        contextofMain=context;
         mCallBacks = (CallBacks) context;
     }
 

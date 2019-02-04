@@ -28,6 +28,8 @@ import com.example.shayanmoradi.xplayer.database.SongDetailLab;
 import com.example.shayanmoradi.xplayer.database.SongDetails;
 import com.example.shayanmoradi.xplayer.lyricsStuffs.EditLyricTextFragment;
 import com.example.shayanmoradi.xplayer.lyricsStuffs.LyricsActivity;
+import com.example.shayanmoradi.xplayer.search.Search2Activity;
+import com.example.shayanmoradi.xplayer.search.SearchFragment;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.tabs.TabLayout;
@@ -43,7 +45,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-public class MainActivity extends AppCompatActivity implements SongsFragment.CallBacks, ControlMusicFragment.CallBacks, ControlArtistFragment.CallBacks,LovesFragment.CallBacks {
+public class MainActivity extends AppCompatActivity implements SongsFragment.CallBacks, ControlMusicFragment.CallBacks, ControlArtistFragment.CallBacks, LovesFragment.CallBacks, SearchFragment.CallBacks {
     private ViewPager viewPager;
     private TabLayout tabLayout;
 
@@ -72,8 +74,11 @@ public class MainActivity extends AppCompatActivity implements SongsFragment.Cal
     private TextView lyricsShower;
     private View bottomSheet;
     private View ViewPagerContiner;
+    private View bigArtContiner;
     private ImageButton addToLoveList;
     private Toolbar xPlayerToolBar;
+    private TabLayout topPageTabs;
+    private ImageButton searchBtn;
     SongDetails songDetailsGet;
     int xCharPointerToFirst = 0;
     int xCharPointerToEnd;
@@ -100,23 +105,27 @@ public class MainActivity extends AppCompatActivity implements SongsFragment.Cal
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 switch (newState) {
                     case BottomSheetBehavior.STATE_EXPANDED:
+
                         //   Toast.makeText(MainActivity.this, "open", Toast.LENGTH_SHORT).show();
                         plaeUnPlayOnTop.setVisibility(View.GONE);
                         showLyrics.setVisibility(View.VISIBLE);
                         viewPager.setVisibility(View.GONE);
                         lyricsShower.setVisibility(View.GONE);
                         xPlayerToolBar.setVisibility(View.GONE);
+                        topPageTabs.setVisibility(View.VISIBLE);
                         if (lyrics) {
                             // showLyrics.setBackground(MainActivity.this.getResources().getDrawable(R.drawable.lyrics_3));
                             lyricsShower.setVisibility(View.VISIBLE);
-                            bigArtWrk.setVisibility(View.GONE);
+                          //  bigArtWrk.setVisibility(View.GONE);
+                            bigArtContiner.setVisibility(View.GONE);
                         }
                         break;
                     case BottomSheetBehavior.STATE_COLLAPSED:
                         // Toast.makeText(MainActivity.this, "close", Toast.LENGTH_SHORT).show();
                         plaeUnPlayOnTop.setVisibility(View.VISIBLE);
                         xPlayerToolBar.setVisibility(View.VISIBLE);
-                        bigArtWrk.setVisibility(View.VISIBLE);
+                      // bigArtWrk.setVisibility(View.VISIBLE);
+                        bigArtContiner.setVisibility(View.VISIBLE);
                         viewPager.setVisibility(View.VISIBLE);
 
                         break;
@@ -152,12 +161,14 @@ public class MainActivity extends AppCompatActivity implements SongsFragment.Cal
             public void onClick(View v) {
                 if (lyrics == true) {
                     lyricsShower.setVisibility(View.GONE);
-                    bigArtWrk.setVisibility(View.VISIBLE);
+                  //  bigArtWrk.setVisibility(View.VISIBLE);
+                    bigArtContiner.setVisibility(View.VISIBLE);
                     showLyrics.setBackground(MainActivity.this.getResources().getDrawable(R.drawable.lyrics_4));
                 } else {
                     showLyrics.setBackground(MainActivity.this.getResources().getDrawable(R.drawable.lyrics_3));
                     lyricsShower.setVisibility(View.VISIBLE);
-                    bigArtWrk.setVisibility(View.GONE);
+                    //bigArtWrk.setVisibility(View.GONE);
+                    bigArtContiner.setVisibility(View.GONE);
                 }
 
 
@@ -173,6 +184,13 @@ public class MainActivity extends AppCompatActivity implements SongsFragment.Cal
                 //  lyricsShower.setText(songDetailsGet.getTimesLyrics());
 
                 lyrics = !lyrics;
+            }
+        });
+        searchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, Search2Activity.class);
+                startActivity(intent);
             }
         });
         addToLoveList.setOnClickListener(new View.OnClickListener() {
@@ -392,7 +410,9 @@ public class MainActivity extends AppCompatActivity implements SongsFragment.Cal
         bottomSheet = findViewById(R.id.bottom_sheet);
         xPlayerToolBar = findViewById(R.id.x_palyer);
         addToLoveList = findViewById(R.id.add_to_love);
-
+        topPageTabs = findViewById(R.id.tabs);
+        searchBtn = findViewById(R.id.search_btn);
+        bigArtContiner = findViewById(R.id.big_art_continer);
     }
 
     @Override
@@ -544,7 +564,7 @@ public class MainActivity extends AppCompatActivity implements SongsFragment.Cal
     private void checkPositions(int mediaPlayerPos) {
 
         if (XFirstPos != "") {
-            lyricsShower.setText("test");
+          //  lyricsShower.setText("NO thing to show");
             int first = Integer.parseInt(XFirstPos);
             int end = Integer.parseInt(XEndPos);
 

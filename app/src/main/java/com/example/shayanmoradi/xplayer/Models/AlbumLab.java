@@ -222,6 +222,15 @@ public class AlbumLab {
         }
         return resulat;
     }
+    public List<Album> searchAlbumsFromName(String albumName) {
+        //search for song
+        List<Album> albums = getAllAllbums();
+        for (int i = 0; i < albums.size(); i++) {
+            if (albums.get(i).getmAlbumName().contains(albumName))
+                albums.add(albums.get(i));
+        }
+        return albums;
+    }
 //
 //    public List<Song> getSongsInAlbum(Album album) {
 //

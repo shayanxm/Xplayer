@@ -169,6 +169,7 @@ public class SongLab {
         }
         return null;
     }
+
     public Song getSongName(String mSongPath) {
         //search for song
         List<Song> songs = getAllSongs();
@@ -187,6 +188,17 @@ public class SongLab {
                 return songs.get(i);
         }
         return null;
+    }
+
+    public List<Song> searchSongsFromName(String songName) {
+        //search for song
+
+        List<Song>result=new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            if (mAllSongs.get(i).getmSongName().contains(songName))
+                result.add(mAllSongs.get(i));
+        }
+        return result;
     }
 
     public int getNurmberPointer(Song song) {
