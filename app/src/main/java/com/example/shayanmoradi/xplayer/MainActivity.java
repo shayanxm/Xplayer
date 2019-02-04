@@ -1,5 +1,6 @@
 package com.example.shayanmoradi.xplayer;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
@@ -20,6 +21,10 @@ import com.example.shayanmoradi.xplayer.Models.SongLab;
 import com.example.shayanmoradi.xplayer.ViewPagerFragments.AlbumsFragment;
 import com.example.shayanmoradi.xplayer.ViewPagerFragments.ArtistsFragment;
 import com.example.shayanmoradi.xplayer.ViewPagerFragments.SongsFragment;
+import com.example.shayanmoradi.xplayer.database.SongDetailLab;
+import com.example.shayanmoradi.xplayer.database.SongDetails;
+import com.example.shayanmoradi.xplayer.lyricsStuffs.EditLyricTextFragment;
+import com.example.shayanmoradi.xplayer.lyricsStuffs.LyricsActivity;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.tabs.TabLayout;
@@ -29,12 +34,13 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-public class MainActivity extends AppCompatActivity implements SongsFragment.CallBacks, ControlMusicFragment.CallBacks,ControlArtistFragment.CallBacks {
+public class MainActivity extends AppCompatActivity implements SongsFragment.CallBacks, ControlMusicFragment.CallBacks, ControlArtistFragment.CallBacks {
     private ViewPager viewPager;
     private TabLayout tabLayout;
 
@@ -46,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements SongsFragment.Cal
     private boolean trueStart = false;
     private boolean repeat = true;
     private boolean shuffle = true;
+    private boolean lyrics = false;
     private Song currentSong;
     private ImageView songArtWork;
     public TextView songTitile;
@@ -57,7 +64,19 @@ public class MainActivity extends AppCompatActivity implements SongsFragment.Cal
     private ImageButton plaeUnPlayOnTop;
     private ImageButton repeatSong;
     private ImageButton shuffleSongs;
+    private ImageButton showLyrics;
+    private TextView lyricsShower;
+    private View bottomSheet;
+    private View ViewPagerContiner;
+    private Toolbar xPlayerToolBar;
+    SongDetails songDetailsGet;
+    int xCharPointerToFirst = 0;
+    int xCharPointerToEnd;
 
+    String XFirstPos = "";
+    String XEndPos = "";
+    int pointerChandoimJomle = -1;
+    boolean xOnlyOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,17 +85,40 @@ public class MainActivity extends AppCompatActivity implements SongsFragment.Cal
         /////
         castView();
         ///
-        View bottomSheet = findViewById(R.id.tes);
 
+        View bottomSheet = findViewById(R.id.tes);
+        bottomSheet.setEnabled(false);
+
+        lyricsShower.setVisibility(View.GONE);
         BottomSheetBehavior.from(bottomSheet).setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 switch (newState) {
                     case BottomSheetBehavior.STATE_EXPANDED:
-                        Toast.makeText(MainActivity.this, "open", Toast.LENGTH_SHORT).show();
+                        //   Toast.makeText(MainActivity.this, "open", Toast.LENGTH_SHORT).show();
+                        plaeUnPlayOnTop.setVisibility(View.GONE);
+                        showLyrics.setVisibility(View.VISIBLE);
+                        viewPager.setVisibility(View.GONE);
+                        lyricsShower.setVisibility(View.GONE);
+                        xPlayerToolBar.setVisibility(View.GONE);
+                        if (lyrics) {
+                            // showLyrics.setBackground(MainActivity.this.getResources().getDrawable(R.drawable.lyrics_3));
+                            lyricsShower.setVisibility(View.VISIBLE);
+                            bigArtWrk.setVisibility(View.GONE);
+                        }
                         break;
                     case BottomSheetBehavior.STATE_COLLAPSED:
-                        Toast.makeText(MainActivity.this, "close", Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(MainActivity.this, "close", Toast.LENGTH_SHORT).show();
+                        plaeUnPlayOnTop.setVisibility(View.VISIBLE);
+                        xPlayerToolBar.setVisibility(View.VISIBLE);
+                        bigArtWrk.setVisibility(View.VISIBLE);
+                        viewPager.setVisibility(View.VISIBLE);
+
+                        break;
+                    case BottomSheetBehavior.STATE_DRAGGING:
+                        //   Toast.makeText(MainActivity.this, "drqgg", Toast.LENGTH_SHORT).show();
+
+                        viewPager.setVisibility(View.VISIBLE);
                         break;
                 }
             }
@@ -99,6 +141,35 @@ public class MainActivity extends AppCompatActivity implements SongsFragment.Cal
 
         setViewUp(currentSong, true);
         setViewOnrotate(currentSong);
+        // setCurrentText();
+        showLyrics.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (lyrics == true) {
+                    lyricsShower.setVisibility(View.GONE);
+                    bigArtWrk.setVisibility(View.VISIBLE);
+                    showLyrics.setBackground(MainActivity.this.getResources().getDrawable(R.drawable.lyrics_4));
+                } else {
+                    showLyrics.setBackground(MainActivity.this.getResources().getDrawable(R.drawable.lyrics_3));
+                    lyricsShower.setVisibility(View.VISIBLE);
+                    bigArtWrk.setVisibility(View.GONE);
+                }
+
+
+                //  showLyrics.setVisibility(View.GONE);
+                SongDetails songDetails = new SongDetails();
+                // songDetails.setFullLyrics("miran adama az ona faghat khatere hashon b ja mimone :)");
+                //  songDetails.setDetailOfsongName(currentSong.getmSongName());
+                // SongDetailLab.getInstance(MainActivity.this).addDetail(songDetails);
+                //  SongDetailLab.getInstance(MainActivity.this).update(songDetails);
+                songDetails = new SongDetails();
+                // songDetailsGet = SongDetailLab.getInstance(MainActivity.this).getDetail(currentSong.getmSongName());
+//         lyricsShower.setText(songDetailsGet.getFullLyrics());
+                //  lyricsShower.setText(songDetailsGet.getTimesLyrics());
+
+                lyrics = !lyrics;
+            }
+        });
         shuffleSongs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,7 +186,30 @@ public class MainActivity extends AppCompatActivity implements SongsFragment.Cal
 
             }
         });
-
+      bigArtWrk.setOnLongClickListener(new View.OnLongClickListener() {
+          @Override
+          public boolean onLongClick(View v) {
+              EditLyricTextFragment datePickerFragment = EditLyricTextFragment.newInstance(currentSong.getmSongName());
+//        datePickerFragment.setTargetFragment(GetInfoFragment.this,
+//                REQ_DATE_PICKER);
+              //   datePickerFragment.show(FragmentManager, "he");
+              Intent intent = LyricsActivity.newIntent(MainActivity.this, currentSong.getmSongName());
+              startActivity(intent);
+              return false;
+          }
+      });
+//        bigArtWrk.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                EditLyricTextFragment datePickerFragment = EditLyricTextFragment.newInstance(currentSong.getmSongName());
+////        datePickerFragment.setTargetFragment(GetInfoFragment.this,
+////                REQ_DATE_PICKER);
+//                //   datePickerFragment.show(FragmentManager, "he");
+//                Intent intent = LyricsActivity.newIntent(MainActivity.this, currentSong.getmSongName());
+//                startActivity(intent);
+//
+//            }
+//        });
         repeatSong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -268,6 +362,11 @@ public class MainActivity extends AppCompatActivity implements SongsFragment.Cal
         plaeUnPlayOnTop = findViewById(R.id.paly_pause_on_top);
         repeatSong = findViewById(R.id.repeat_btn);
         shuffleSongs = findViewById(R.id.shuffle_btn);
+        showLyrics = findViewById(R.id.show_lyrics_btn);
+        lyricsShower = findViewById(R.id.lyrics_shower);
+        bottomSheet = findViewById(R.id.bottom_sheet);
+        xPlayerToolBar = findViewById(R.id.x_palyer);
+
     }
 
     @Override
@@ -301,6 +400,11 @@ public class MainActivity extends AppCompatActivity implements SongsFragment.Cal
         if (start == false) {
             pauseUnPauseSong.setBackground(MainActivity.this.getResources().getDrawable(R.drawable.pause));
             plaeUnPlayOnTop.setBackground(MainActivity.this.getResources().getDrawable(R.drawable.pause_2));
+        }
+        songDetailsGet = SongDetailLab.getInstance(MainActivity.this).getDetail(currentSong.getmSongName());
+        if (xOnlyOnce == false) {
+            setCurrentText();
+            xOnlyOnce = true;
         }
     }
 
@@ -402,9 +506,65 @@ public class MainActivity extends AppCompatActivity implements SongsFragment.Cal
             espledTime.setText(elapsedTime);
             int remaing = CustomPlayer.getInstance(MainActivity.this).getSongDuration() - CustomPlayer.getInstance(MainActivity.this).getCurrentPos();
             remaingTime.setText(createTime(remaing));
+
+
+            //  lyricsShower.setText("not began yet");
+            if (songDetailsGet != null)
+                checkPositions(CustomPlayer.getInstance(MainActivity.this).getCurrentPos());
+
         }
     };
 
+    private void checkPositions(int mediaPlayerPos) {
+
+        if (XFirstPos != "") {
+            lyricsShower.setText("test");
+            int first = Integer.parseInt(XFirstPos);
+            int end = Integer.parseInt(XEndPos);
+
+
+            if (mediaPlayerPos > first && mediaPlayerPos <= end) {
+
+                lyricsShower.setText(showString());
+            }
+            if (end < mediaPlayerPos) {
+                setCurrentText();
+            }
+        }
+    }
+
+    private String showString() {
+        String temp = songDetailsGet.getFullLyrics();
+        String shower = temp.substring(pointerChandoimJomle * 20, (pointerChandoimJomle + 1) * 20);
+        return shower;
+    }
+
+    private void setCurrentText() {
+        if (songDetailsGet != null) {
+            XFirstPos = "";
+            XEndPos = "";
+            songDetailsGet = SongDetailLab.getInstance(MainActivity.this).getDetail(currentSong.getmSongName());
+            String timesLyrics = songDetailsGet.getTimesLyrics();
+
+            if (timesLyrics.charAt(xCharPointerToFirst) != 'E' && timesLyrics.charAt(xCharPointerToEnd) != 'E') {
+                while (timesLyrics.charAt(xCharPointerToFirst) != ',') {
+                    XFirstPos += timesLyrics.charAt(xCharPointerToFirst);
+
+
+                    xCharPointerToFirst++;
+                }
+                xCharPointerToEnd = xCharPointerToFirst + 1;
+                while (timesLyrics.charAt(xCharPointerToEnd) != ';') {
+                    XEndPos += timesLyrics.charAt(xCharPointerToEnd);
+
+
+                    xCharPointerToEnd++;
+                }
+                xCharPointerToFirst = xCharPointerToEnd + 1;
+                pointerChandoimJomle++;
+            }
+        }
+    }
 
 //    private Handler handler = new Handler() {
 //        @Override
@@ -428,5 +588,9 @@ public class MainActivity extends AppCompatActivity implements SongsFragment.Cal
             timeLabe += "0";
         timeLabe += sec;
         return timeLabe;
+    }
+
+    public int deCodeTime(String time) {
+        return 0;
     }
 }
